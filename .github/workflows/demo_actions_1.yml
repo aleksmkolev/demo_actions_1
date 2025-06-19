@@ -7,9 +7,10 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-test:
+  unit_tests:
  
     runs-on: ubuntu-latest
+
 
     steps:
     - name: checkout the repository
@@ -20,5 +21,21 @@ jobs:
         node-version: 20
     - name: Install dependencies
       run: npm install
-    - name: Run integration tests
+    - name: Run unit tests
       run: npm test
+
+  security_tests:
+    needs: unit_tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout the repository
+      uses: actions/checkout@v4 
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4 
+      with:
+        node-version: 20
+    - name: Install dependencies
+      run: npm install
+    - name: Run security tests
+      run: npm audit
